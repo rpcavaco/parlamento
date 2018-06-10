@@ -5,42 +5,7 @@ import json
 from pprint import pprint
 from datetime import datetime as dt
 
-
-CONFIGOBJ_ACTIV_DEPUTADOS = {
-	'prefixos_a_truncar': [
-		'pt_gov_ar_wsar_objectos_', 
-		'pt_ar_wsgode_objectos_'
-	],
-	'prefixos_de_atributo_a_ignorar': [
-		'@', '?', 'ArrayOf'
-	],
-	'sufixos_de_atributo_a_ignorar': [
-		'List'
-	],
-	'atributos_a_ignorar': [
-		"ini","req","sgt", "scgt", "intev", "actP", "gpa", "rel", "eventos",
-		"deslocacoes","cms","dadosLegisDeputado","audiencias","audicoes", "depGP", "depCargo",
-		"parlamentoJovens", "videos", "depSituacao", "dlP", "dlE", "relatoresIniciativas",
-		"relatoresPeticoes", "relatoresContasPublicas", "relatoresIniEuropeias"		
-	]
-}
-
-CONFIGOBJ_ACTIVS= {
-	'prefixos_a_truncar': [
-		'pt_gov_ar_objectos_actividades_',
-		'pt_gov_ar_objectos_',
-		'ArrayOfPt_gov_ar_objectos_'
-	],
-	'prefixos_de_atributo_a_ignorar': [
-		'@', '?', 'ArrayOf', "Dados", "DetalhePesquisa"
-	],
-	'sufixos_de_atributo_a_ignorar': [
-		'List'
-	],
-	'atributos_a_ignorar': [
-		"Atividades"
-	]
-}
+import pprint
 
 
 
@@ -222,32 +187,64 @@ def lerstruct(p_path, out_dict, configobj, listaumelemento=True, maxlevel=-1, ex
 	level = 0
 	tree = json.load(open(p_path))
 	
+	keys_set = set([])
+	
+	pp = pprint.PrettyPrinter(indent=4)
+	
+	# A stack é uma lista que contém os nós da árvore que foram 'tocados' 
+	# mas ainda não 'visitados'. Em cada nova 'visita' a um nó da árvore, 
+	# os nós que lhe são adjacentes são 'tocados' e colocados na stack para 
+	# serem 'visitados' em ciclos seguintes
+	# No início, a stack contém apenas o nó raiz da árvore.
+	
 	stack.append([level, '--raiz--', tree, out_dict, []])
 	
 	count = 0
 	
 	while len(stack) > 0:
 
+		# Retirar da stack um nó 'tocado'.  
 		currlevel, currid, currnode, outobj_node, tree_path_list = stack.pop()
 		
 		
 		# if 'Eventos' in tree_path_list:
 			# print(tree_path_list)
-			# break
+		# break
 		
+		# Chegámos ao final de um ramo da árvore
 		if currnode is None:
 			continue
 		
+		# Cada nova visita, a 'profundidade' aumenta
 		newlevel = currlevel + 1	
 		
+		# Se tiver sido imposto um limite de 'profundidade' às visitas,
+		# e esse limite tiver sido ultrapassado, vamos parar de 'tocar'
+		# nós, impedindo novas colocações na stack
 		if maxlevel >= 0 and newlevel > maxlevel:
 			dostack = False
 		else:
 			dostack = True
 
+		# Truncar prefixos de acordo com as configurações
 		for prefx in configobj['prefixos_a_truncar']:			
 			currid = currid.replace(prefx, '')
 		
+		# Se o nó seguinte for um dicionário de uma só chave que contém
+		#  uma lista, vamos resumi-lo 'a lista nele contida
+		if isinstance(currnode, dict) and len(currnode.keys()) == 1:
+			keysl = list(currnode.keys())
+			singlekey = keysl[0]
+			if isinstance(currnode[singlekey], list):
+				currnode = currnode[singlekey]
+				
+		# if isinstance(currnode, dict):
+			# keysl = list(currnode.keys())
+			# firstkey = keysl[0]
+			# print(f"currid: {currid}, fkey:{firstkey}")
+		
+		# Se o nó seguinte for uma lista, riar e preencher uma lista
+		# no objecto de saída
 		if isinstance(currnode, list):	
 			
 			# if len(currnode) == 1:
@@ -257,8 +254,25 @@ def lerstruct(p_path, out_dict, configobj, listaumelemento=True, maxlevel=-1, ex
 						# if isinstance(testobj, list) and len(testobj) > 1:
 							# currnode = testobj
 		
-			outobj_node[currid] = []
-			outobj_node = outobj_node[currid]
+			try:
+				currid = int(currid)
+			except ValueError:
+				pass
+				
+			try:
+				
+				if not isinstance(outobj_node, list):
+					# outobj_node.append([])
+					# outobj_node = outobj_node[-1]
+				# else:					
+					outobj_node[currid] = []
+					outobj_node = outobj_node[currid]
+
+			except:
+				print(f"currid: {currid} type: {type(currid)}, len:{len(outobj_node)}")
+				pp.pprint(currnode)
+				pp.pprint(outobj_node)
+				raise
 
 			if dostack:
 				for ei, el in reversed(list(enumerate(currnode))):
@@ -294,16 +308,23 @@ def lerstruct(p_path, out_dict, configobj, listaumelemento=True, maxlevel=-1, ex
 				if isinstance(outobj_node, list):
 					outobj_node.append({})
 					outobj_node = outobj_node[-1]
-				else:			
+				else:	
 					outobj_node[currid] = {}
 					outobj_node = outobj_node[currid]
 					
 			if dostack:
 				kl = list(currnode.keys())
 				kl.reverse()
-				for key in kl:		
-					tree_path_list.append(key)		
-					stack.append([newlevel, key, currnode[key], outobj_node, tree_path_list])
+				for key in kl:	
+					if len(kl) == 1 and isinstance(currnode[key], list):
+						for ei, el in reversed(list(enumerate(currnode[key]))):
+							tree_path_list.append(ei)
+							stack.append([newlevel, str(ei), el, outobj_node, tree_path_list])
+							if listaumelemento:
+								break
+					else:
+						tree_path_list.append(key)		
+						stack.append([newlevel, key, currnode[key], outobj_node, tree_path_list])
 
 		else:	
 
@@ -315,7 +336,7 @@ def lerstruct(p_path, out_dict, configobj, listaumelemento=True, maxlevel=-1, ex
 					outobj_node.append(currnode)
 				elif isinstance(outobj_node, dict):
 					outobj_node[currid] = currnode
-
+					
 def unique(p_in_path, p_out_path, p_configobj):
 	out = {}
 	lerstruct(p_in_path, out, p_configobj)
@@ -328,22 +349,20 @@ def full(p_in_path, p_out_path, p_configobj, listaumelemento=False, maxlevel=-1,
 	with open(p_out_path.format(dt.now().isoformat()), 'w') as outfile:
 		json.dump(out, outfile, indent=2, ensure_ascii=False)
 				
-if __name__ == "__main__":
+# if __name__ == "__main__":
 	
-	#unique('Originais/AtividadesXIII.json', 'Atividade013_Struct_{}.json', CONFIGOBJ_ACTIVS)
+	# #unique('Originais/AtividadesXIII.json', 'Atividade013_Struct_{}.json', CONFIGOBJ_ACTIVS)
 	
-	#unique('Originais/AtividadeDeputadoXIII.json', 'AtividadeDeputado013_{}.json', CONFIGOBJ_ACTIV_DEPUTADOS)
+	# #unique('Originais/AtividadeDeputadoXIII.json', 'AtividadeDeputado013_{}.json', CONFIGOBJ_ACTIV_DEPUTADOS)
 	
-	#listaparcial('Originais/AtividadesXIII.json', 'AtividadesXIII_amostra.txt', limitcount=1000, maxlevel=6)
+	# #listaparcial('Originais/AtividadesXIII.json', 'AtividadesXIII_amostra.txt', limitcount=1000, maxlevel=6)
 
 
-	#full('Originais/AtividadesXIII.json', 'Atividade013_{}.json', CONFIGOBJ_ACTIVS)
+	# #full('Originais/AtividadesXIII.json', 'Atividade013_{}.json', CONFIGOBJ_ACTIVS)
 
-	#full('Originais/AtividadeDeputadoXIII.json', 'AtividadeDeputado013_{}.json', CONFIGOBJ_ACTIV_DEPUTADOS)
+	# #full('Originais/AtividadeDeputadoXIII.json', 'AtividadeDeputado013_{}.json', CONFIGOBJ_ACTIV_DEPUTADOS)
 	
-	# 20180509 
-	#listaparcial('Originais/20180609/AtividadesXIII.json', 'saidas/20180609/AtividadesXIII_amostra.txt', limitcount=1000, maxlevel=6)
-	extractvalues = set([])
-	full('Originais/20180609/AtividadesXIII.json', 'saidas/20180609/Atividade013_Struct_{}.json', CONFIGOBJ_ACTIVS, maxlevel=-1, extractkey="descTipo", extractvalues=extractvalues)
-	
-	print(extractvalues)
+	# # 20180509 
+	# #listaparcial('Originais/20180609/AtividadesXIII.json', 'saidas/20180609/AtividadesXIII_amostra.txt', limitcount=1000, maxlevel=6)
+	# #extractvalues = set([])
+	# full('Originais/20180609/AtividadesXIII.json', 'saidas/20180609/Atividade013_Struct_{}.json', CONFIGOBJ_ACTIVS, maxlevel=-1)
