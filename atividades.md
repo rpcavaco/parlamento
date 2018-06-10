@@ -51,32 +51,32 @@ As atividades gerais (*AtividadesGerais*) podem conter atividades dos tipos desc
 - Voto
 
 
-**Nota**: os nomes dos campos a **negrito *** com um asterisco, representam campos aparentemente obrigatórios que se repetem em todos os registos.
+**Nota**: os nomes dos campos a **negrito** com um asterisco, representam campos aparentemente obrigatórios que se repetem em todos os registos.
 
-Os atributos das **atividades** são:
+Os atributos das**atividades** são:
 
 | Campo JSON | Descrição |
 |------------|---------------|
-| **assunto *** | Assunto a que a atividade diz respeito |
+|**assunto** | Assunto a que a atividade diz respeito |
 | autoresGP | Grupo Parlamentar autor da atividade |
-| convidados | Lista de convidados representados pela estrutura **ConvidadosOut** |
+| convidados | Lista de convidados representados pela estrutura**ConvidadosOut** |
 | dataAgendamentoDebate | Data de agendamento do debate para essa atividade |
 | dataEntrada | Data de entrada da atividade |
-| **descTipo *** | Descrição do tipo de atividade parlamentar na Estrutura **TipodeAtividade**
-| eleitos | Lista de eleitos representados pela estrutura **EleitosOut** |
-| IniciativasConjuntas | Lista de iniciativas representadas pela estrutura **Iniciativas_DiscussaoConjuntaOut** |
-| **legislatura *** | Legislatura |
-| **numero *** | Identificador do tipo de atividade parlamentar na estrutura **TipodeAtividade** |
+|**descTipo** | Descrição do tipo de atividade parlamentar na Estrutura**TipodeAtividade**
+| eleitos | Lista de eleitos representados pela estrutura**EleitosOut** |
+| IniciativasConjuntas | Lista de iniciativas representadas pela estrutura**Iniciativas_DiscussaoConjuntaOut** |
+|**legislatura** | Legislatura |
+|**numero** | Identificador do tipo de atividade parlamentar na estrutura**TipodeAtividade** |
 | observações | Observações associadas à atividade |
 | orgaoExterior | Órgão externo, associado à atividade |
-| publicação | Lista de publicações representadas pela estrutura **PublicacoesOut** |
-| publicacaoDebate | Lista de publicações representadas pela estrutura **PublicacoesOut** |
-| **sessão *** | Sessão Legislativa |
-| texto | Texto relativo ao tipo de atividade parlamentar na estrutura **TipodeAtividade** |
+| publicação | Lista de publicações representadas pela estrutura**PublicacoesOut** |
+| publicacaoDebate | Lista de publicações representadas pela estrutura**PublicacoesOut** |
+|**sessão** | Sessão Legislativa |
+| texto | Texto relativo ao tipo de atividade parlamentar na estrutura**TipodeAtividade** |
 | textosAprovados | Diplomas originados pela atividade |
-| **tipo *** | Sigla de tipo de atividade parlamentar na estrutura **TipodeAtividade** |
-| **tipoAutor *** | Campo Tipo na estrutura **TipodeAutor** |
-| votacaoDebate | Lista de votações representadas pela estrutura **Votacao** |
+|**tipo** | Sigla de tipo de atividade parlamentar na estrutura**TipodeAtividade** |
+|**tipoAutor** | Campo Tipo na estrutura**TipodeAutor** |
+| votacaoDebate | Lista de votações representadas pela estrutura**Votacao** |
 
 
 ### Estruturas auxiliares
