@@ -15,8 +15,7 @@ Segundo o documento de estrutura das atividades, estas podem ser dos seguintes t
 - Cerimónias
 - Conta  Geral  do  Estado
 - Debates
-- Declarações
-- Políticas
+- Declarações Políticas
 - Defesa  Nacional
 - Deslocações  no  âmbito  das  Comissões
 - Deslocações  do  Presidente  da República
@@ -44,7 +43,7 @@ Este elemento contém um novo dicionário que contém as seguintes chaves, que a
 - Audiencias
 - Deslocações
 
-#### AtividadesGerais
+#### Atividades Gerais
 
 As atividades gerais (*AtividadesGerais*) podem conter atividades dos seguintes tipos:
 
