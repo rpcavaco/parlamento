@@ -51,40 +51,95 @@ As atividades gerais (*AtividadesGerais*) podem conter atividades dos tipos desc
 - Voto
 
 
+**Nota**: os nomes dos campos a **negrito *** com um asterisco, representam campos aparentemente obrigatórios que se repetem em todos os registos.
+
 Os atributos das **atividades** são:
 
 | Campo JSON | Descrição |
 |------------|---------------|
-| assunto | Assunto a que a atividade diz respeito |
+| **assunto *** | Assunto a que a atividade diz respeito |
 | autoresGP | Grupo Parlamentar autor da atividade |
 | convidados | Lista de convidados representados pela estrutura **ConvidadosOut** |
 | dataAgendamentoDebate | Data de agendamento do debate para essa atividade |
 | dataEntrada | Data de entrada da atividade |
-| descTipo | Descrição do tipo de atividade parlamentar na Estrutura **TipodeAtividade**
+| **descTipo *** | Descrição do tipo de atividade parlamentar na Estrutura **TipodeAtividade**
 | eleitos | Lista de eleitos representados pela estrutura **EleitosOut** |
 | IniciativasConjuntas | Lista de iniciativas representadas pela estrutura **Iniciativas_DiscussaoConjuntaOut** |
-| legislatura | Legislatura |
-| numero | Identificador do tipo de atividade parlamentar na estrutura **TipodeAtividade** |
+| **legislatura *** | Legislatura |
+| **numero *** | Identificador do tipo de atividade parlamentar na estrutura **TipodeAtividade** |
 | observações | Observações associadas à atividade |
 | orgaoExterior | Órgão externo, associado à atividade |
 | publicação | Lista de publicações representadas pela estrutura **PublicacoesOut** |
 | publicacaoDebate | Lista de publicações representadas pela estrutura **PublicacoesOut** |
-| sessão | Sessão Legislativa |
-| Texto | Texto relativo ao tipo de atividade parlamentar na estrutura **TipodeAtividade** |
+| **sessão *** | Sessão Legislativa |
+| texto | Texto relativo ao tipo de atividade parlamentar na estrutura **TipodeAtividade** |
 | textosAprovados | Diplomas originados pela atividade |
-| tipo | Sigla de tipo de atividade parlamentar na estrutura **TipodeAtividade** |
-| tipoAutor | Campo Tipo na estrutura **TipodeAutor** |
+| **tipo *** | Sigla de tipo de atividade parlamentar na estrutura **TipodeAtividade** |
+| **tipoAutor *** | Campo Tipo na estrutura **TipodeAutor** |
 | votacaoDebate | Lista de votações representadas pela estrutura **Votacao** |
-
-As estruturas auxiliares são descritas no final.
-
-......
 
 
 ### Estruturas auxiliares
 
-ConvidadosOut
+#### ConvidadosOut
 
 | Campo JSON | Descrição |
 |------------|---------------|
 | assunto | Assunto a que a atividade diz respeito |
+| cargo | Cargo que o convidado exerce aquando da vinda à AR |
+| honra | Indicação se é convidado de honra ou não |
+| nome | Nome do convidado |
+| pais | País da nacionalidade do convidado |
+
+#### TipodeAtividade
+
+| Campo JSON | Descrição |
+|------------|---------------|
+| AGP | Atividade do grupo parlamentar de amizade |
+| AUD | Audiência |
+| AUP | Audição |
+| CER | Cerimónias |
+| CGE | Conta Geral do Estado |
+| DEB | Debates diversos |
+| DES | Deslocação |
+| DPO | Declarações políticas |
+| DPR | Deslocações do Presidente da República |
+| EGP | Eleição do grupo parlamentar de amizade |
+| EVN | Evento |
+| GOD | Grandes Opções do Conceito Estratégico de Defesa Nacional |
+| IMU | Imunidade parlamentar |
+| INI | Discussão de Iniciativas |
+| ITG | Interpelação ao governo |
+| MOC | Moção |
+| OEX | Eleições e composições de órgãos |
+| PEC | Programa de Estabilidade e Crescimento/Documento de Estratégia Orçamental |
+| PEG | Perguntas ao Governo |
+| PET | Discussão de petições |
+| PII | Parecer de incompatibilidade / Levantamento de imunidade |
+| POR | Orientação da Política Orçamental |
+| PRC | Relatórios externos |
+| PRG | Programa do Governo |
+| PUE | Participação de Portugal na União Europeia |
+| REP | Representações e delegações |
+| RSI | Relatório de segurança interna |
+| SES | Cerimónia |
+| VOT | Voto |
+
+#### EleitosOut
+
+| Campo JSON | Descrição |
+|------------|---------------|
+| Cargo | Cargo do membro eleito para o órgão ou entidade |
+| Nome | Nome do membro eleito para o órgão ou entidade |
+
+#### Iniciativas_DiscussaoConjuntaOut
+| Campo JSON | Descrição |
+|------------|---------------|
+| Dataentrada | Data de Entrada da Iniciativa |
+| DescTipo | Descrição da iniciativa na estrutura TipodeIniciativa |
+| Id | Identificador da iniciativa na estrutura TipodeIniciativa  |
+| Leg | Legislatura |
+| Nr | Número da Iniciativa |
+| Sel | Sessão Legislativa |
+| Tipo | Abreviatura da iniciativa em estrutura TipodeIniciativa |
+| Titulo | Assunto da Iniciativa |
